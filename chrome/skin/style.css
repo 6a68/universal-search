@@ -1,0 +1,6 @@
+#USearchPopupAutoCompleteRichResult {
+  /* This odd CSS property connects an XBL file with XUL DOM.
+   * See mdn.io/moz-binding for more.
+   */
+  -moz-binding: url("chrome://usearch/content/content.xml#usearch-urlbar-rich-result-popup");
+}
