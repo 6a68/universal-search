@@ -1,4 +1,4 @@
-#USearchPopupAutoCompleteRichResult {
+#mainPopupSet #PopupAutoCompleteRichResult {
   /* This odd CSS property connects an XBL file with XUL DOM.
    * See mdn.io/moz-binding for more.
    */
