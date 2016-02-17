@@ -1,5 +1,5 @@
-/* try to increase specifiicty? see if it applies? */
-#mainPopupSet #PopupAutoCompleteRichResult {
+/* we'll just change the id on the popup to this one */
+#USearchPopupAutoCompleteRichResult {
   /* This odd CSS property connects an XBL file with XUL DOM.
    * See mdn.io/moz-binding for more.
    */
