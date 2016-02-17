@@ -1,5 +1,5 @@
-/* we'll just change the id on the popup to this one */
-#USearchPopupAutoCompleteRichResult {
+/* let's try overspecificity to beat the default style? */
+popupset#mainPopupSet panel#PopupAutoCompleteRichResult {
   /* This odd CSS property connects an XBL file with XUL DOM.
    * See mdn.io/moz-binding for more.
    */
