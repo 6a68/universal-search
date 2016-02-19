@@ -8,7 +8,7 @@
            extends="chrome://browser/content/urlbarBindings.xml#urlbar-rich-result-popup">
     <content ignorekeys="true" level="top" consumeoutsideclicks="never"
              aria-owns="richlistbox">
-			<xul:hbox anonid="universalsearch-recommendation" />
+			<xul:hbox id="universal-search-recommendation" />
       <xul:richlistbox anonid="richlistbox" class="autocomplete-richlistbox"
                        flex="1"/>
       <xul:hbox anonid="footer">
