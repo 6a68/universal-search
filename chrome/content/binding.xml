@@ -4,16 +4,7 @@
           xmlns:html="http://www.w3.org/1999/xhtml"
           xmlns:xul="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
           xmlns:xbl="http://www.mozilla.org/xbl">
-  <binding id="usearch-urlbar-rich-result-popup"
+  <binding id="recommendation-popup"
            extends="chrome://browser/content/urlbarBindings.xml#urlbar-rich-result-popup">
-    <content ignorekeys="true"
-             level="top"
-             consumeoutsideclicks="never">
-      <xul:hbox anonid="recommendation"></xul:hbox>
-      <xul:richlistbox anonid="richlistbox"
-                       class="autocomplete-richlistbox"
-                       flex="1" />
-      <children />
-    </content>
   </binding>
 </bindings>
