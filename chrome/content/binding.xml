@@ -20,7 +20,7 @@
         </getter>
         <setter>
         var boxy = document.getAnonymousElementByAttribute(gURLBar.popup, 'anonid', 'richlistbox');
-        var rows = boxy.querySelectorAll('.autocomplete-richlistitem');
+        var rows = boxy.getElementsByClassName('autocomplete-richlistitem');
 
         if (!rows || !rows.length) return;
 
