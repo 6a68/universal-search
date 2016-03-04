@@ -16,18 +16,7 @@
       <field name="_selectedIndex">-1</field>
       <property name="selectedIndex">
         <getter>
-        // ok, here's how the getter can work:
-        // get the items, traverse till you find one with selected="true"
-        var boxy = document.getAnonymousElementByAttribute(gURLBar.popup, 'anonid', 'richlistbox');
-        var rows = boxy.querySelectorAll('.autocomplete-richlistitem');
-        Array.prototype.forEach.call(rows, function(row, i) {
-          if (row.selected) {
-            this._selectedIndex = i;
-            return i;
-          }
-        });
-        this._selectedIndex = -1;
-        return -1;
+        return this._selectedIndex;
         </getter>
         <setter>
         var boxy = document.getAnonymousElementByAttribute(gURLBar.popup, 'anonid', 'richlistbox');
