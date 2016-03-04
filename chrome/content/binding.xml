@@ -13,27 +13,30 @@
       </xul:hbox>
     </content>
     <implementation>
+      <field name="_selectedIndex">-1</field>
       <property name="selectedIndex">
         <getter>
         // ok, here's how the getter can work:
-				// get the items, traverse till you find one with selected="true"
-				let boxy = document.getAnonymousElementByAttribute(gURLBar.popup, 'anonid', 'richlistbox');
-				let rows = boxy.querySelectorAll('.autocomplete-richlistitem');
-				Array.prototype.forEach.call(rows, function(row, i) {
-				  if (row.selected) {
-				    return i;
-				  }
-				});
-				return -1;
-				</getter>
-				<setter>
-				let boxy = document.getAnonymousElementByAttribute(gURLBar.popup, 'anonid', 'richlistbox');
-				let rows = boxy.querySelectorAll('.autocomplete-richlistitem');
+        // get the items, traverse till you find one with selected="true"
+        var boxy = document.getAnonymousElementByAttribute(gURLBar.popup, 'anonid', 'richlistbox');
+        var rows = boxy.querySelectorAll('.autocomplete-richlistitem');
+        Array.prototype.forEach.call(rows, function(row, i) {
+          if (row.selected) {
+            this._selectedIndex = i;
+            return i;
+          }
+        });
+        this._selectedIndex = -1;
+        return -1;
+        </getter>
+        <setter>
+        var boxy = document.getAnonymousElementByAttribute(gURLBar.popup, 'anonid', 'richlistbox');
+        var rows = boxy.querySelectorAll('.autocomplete-richlistitem');
 
-				if (!rows || !rows.length) return;
+        if (!rows || !rows.length) return;
 
         // 1. if anything's selected, unselect it
-				Array.prototype.forEach.call(rows, function(row, i) {
+        Array.prototype.forEach.call(rows, function(row, i) {
           row.selected = false;
         });
 
@@ -46,8 +49,10 @@
           // scroll the row into view, if necessary
           boxy.ensureIndexIsVisible(val);
           return val;
+          this._selectedIndex = val;
         }
         return -1;
+        this._selectedIndex = -1;
         </setter>
       </property>
 
@@ -61,9 +66,12 @@
         <parameter name="index"/>
         <parameter name="maxRow"/>
         <body><![CDATA[
-				  return 0;
-				]]></body>
-			</method>
+          // divide out maxRow if necessary, could be an off-by-one error here
+          let realAmount = amount % maxRow;
+          this._selectedIndex = reverse ? this._selectedIndex - realAmount: this._selectedIndex + realAmount;
+          return this._selectedIndex;
+        ]]></body>
+      </method>
     </implementation>
   </binding>
 
