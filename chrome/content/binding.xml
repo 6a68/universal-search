@@ -12,6 +12,55 @@
         <children/>
       </xul:hbox>
     </content>
+    <implementation>
+      <property name="selectedIndex">
+        <getter>
+        // ok, here's how the getter can work:
+				// get the items, traverse till you find one with selected="true"
+				let boxy = document.getAnonymousElementByAttribute(gURLBar.popup, 'anonid', 'richlistbox');
+				let rows = boxy.querySelectorAll('autocomplete-richlistitem');
+				Array.prototype.forEach.call(rows, function(row, i) {
+				  if (row.selected) {
+				    return i;
+				  }
+				});
+				return -1;
+				</getter>
+				<setter>
+        // what about the setter? this might be called by random XUL code,
+        // or by our highilght manager.
+
+				let boxy = document.getAnonymousElementByAttribute(gURLBar.popup, 'anonid', 'richlistbox');
+				let rows = boxy.querySelectorAll('autocomplete-richlistitem');
+
+        // 1. if anything's selected, unselect it
+				Array.prototype.forEach.call(rows, function(row, i) {
+          row.selected = false;
+        });
+
+        // 2. select the specified value, unless it's -1
+        if (val > -1) {
+          rows[val].selected = true;
+          return val;
+        }
+        return -1;
+        </setter>
+      </property>
+
+      <field name="tree">
+        document.getAnonymousElementByAttribute(this, "anonid", "tree");
+      </field>
+
+      <method name="getNextIndex">
+        <parameter name="reverse"/>
+        <parameter name="amount"/>
+        <parameter name="index"/>
+        <parameter name="maxRow"/>
+        <body><![CDATA[
+				  return 0;
+				]]></body>
+			</method>
+    </implementation>
   </binding>
 
   <binding id="recommendation-urlbar" extends="chrome://browser/content/urlbarBindings.xml#urlbar">
