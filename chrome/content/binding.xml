@@ -18,7 +18,7 @@
         // ok, here's how the getter can work:
 				// get the items, traverse till you find one with selected="true"
 				let boxy = document.getAnonymousElementByAttribute(gURLBar.popup, 'anonid', 'richlistbox');
-				let rows = boxy.querySelectorAll('autocomplete-richlistitem');
+				let rows = boxy.querySelectorAll('.autocomplete-richlistitem');
 				Array.prototype.forEach.call(rows, function(row, i) {
 				  if (row.selected) {
 				    return i;
@@ -27,20 +27,24 @@
 				return -1;
 				</getter>
 				<setter>
-        // what about the setter? this might be called by random XUL code,
-        // or by our highilght manager.
-
 				let boxy = document.getAnonymousElementByAttribute(gURLBar.popup, 'anonid', 'richlistbox');
-				let rows = boxy.querySelectorAll('autocomplete-richlistitem');
+				let rows = boxy.querySelectorAll('.autocomplete-richlistitem');
+
+				if (!rows || !rows.length) return;
 
         // 1. if anything's selected, unselect it
 				Array.prototype.forEach.call(rows, function(row, i) {
           row.selected = false;
         });
 
-        // 2. select the specified value, unless it's -1
+        // 2. select the specified value, unless it's -1 or off the end of the array
         if (val > -1) {
+          if (val > rows.length - 1) {
+            val = rows.length - 1;
+          }
           rows[val].selected = true;
+          // scroll the row into view, if necessary
+          boxy.ensureIndexIsVisible(val);
           return val;
         }
         return -1;
