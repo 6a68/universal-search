@@ -37,11 +37,11 @@
           rows[val].selected = true;
           // scroll the row into view, if necessary
           boxy.ensureIndexIsVisible(val);
-          return val;
           this._selectedIndex = val;
+          return val;
         }
-        return -1;
         this._selectedIndex = -1;
+        return -1;
         </setter>
       </property>
 
