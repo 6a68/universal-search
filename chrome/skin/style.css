@@ -23,6 +23,11 @@ textbox#urlbar {
   padding: 8px 15px 8px 9px;
 }
 
+#universal-search-recommendation.highlight {
+  background-color: blue;
+  text: white;
+}
+
 #universal-search-recommendation[collapsed="true"] {
   border: 0;
 }
