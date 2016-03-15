@@ -109,11 +109,11 @@
   ]]>
   <binding id="autocomplete-richlistbox" extends="chrome://global/content/bindings/autocomplete.xml#autocomplete-richlistbox">
     <handlers>
-      <handler event="mousemove" phase="capturing"><![CDATA[
+      <handler event="mouseover" phase="capturing"><![CDATA[
         // if the mouse moves over the results list, the recommendation
         // should lose its highlight
-        window.universalSearch.popup.onResultsMouseEnter(event);
-        return true;
+        window.universalSearch.popup.onResultsMouseOver(event);
+        //return true;
       ]]></handler>
     </handlers>
   </binding>
