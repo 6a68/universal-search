@@ -22,6 +22,10 @@
     <implementation>
       <![CDATA[
         /*
+         * Turns out we need to keep this set on the richlistbox for mousemove
+         * stuff to be simple.
+         * TODO: update these docs once it's sorted.
+         *
          * The selectedIndex setter sets the blue highlight on the currently-
          * selected item in the results list. The existing implementation,
          * defined in autocomplete.xml, automatically closes the popup if no
@@ -31,50 +35,22 @@
          * universal search recommendation element can steal the highlight.
          */
       ]]>
-      <field name="_selectedIndex">-1</field>
-      <property name="selectedIndex">
-        <getter>
-          return this._selectedIndex;
-        </getter>
+      <property name="selectedIndex"
+                onget="return this.richlistbox.selectedIndex;">
         <setter><![CDATA[
-          var resultsContainer = document.getAnonymousElementByAttribute(gURLBar.popup, 'anonid', 'richlistbox');
+          // Naively set the value. Let the richlistbox worry about whether
+          // the value actually exists in the list or not.
+          this.richlistbox.selectedIndex = val;
 
-          // NOTE: getElementsByClassName is needed to obtain a live NodeList.
-          // The results aren't inserted all at once: they are inserted a few
-          // at a time over many successive turns. In order to avoid setting
-          // the selectedIndex past the end of the results list, and also to
-          // avoid mistakenly concluding that the results list is empty, the
-          // NodeList needs to be live, not static.
-          var resultRows = resultsContainer.getElementsByClassName('autocomplete-richlistitem');
+          // Because we we aren't ensuring `val` exists, the actual
+          // selectedIndex might differ from what was requested. So, we should
+          // check the DOM for the final value.
+          const finalVal = this.richlistbox.selectedIndex;
 
-          if (!resultRows || !resultRows.length) {
-            return;
-          }
+          // Scroll the row into view, if necessary.
+          this.richlistbox.ensureIndexIsVisible(finalVal);
 
-          if (val > resultRows.length - 1) {
-            val = resultRows.length - 1;
-          } else if (val < -1) {
-            val = -1;
-          }
-
-          // Unselect all the rows (in case of any weird multiple-focus bugs),
-          // then immediately select the appropriate row, to hopefully batch
-          // the selection changes into a single DOM update.
-          Array.prototype.forEach.call(resultRows, function(row, i) {
-            row.selected = false;
-          });
-
-          // Highlight the row, if it's found, else highlight nothing.
-          if (resultRows[val]) {
-            resultRows[val].selected = true;
-            // Scroll the row into view, if necessary.
-            resultsContainer.ensureIndexIsVisible(val);
-            this._selectedIndex = val;
-            return val;
-          } else {
-            this._selectedIndex = -1;
-            return -1;
-          }
+          return finalVal;
         ]]></setter>
       </property>
 
@@ -93,11 +69,19 @@
         <parameter name="maxRow"/>
         <body><![CDATA[
           let realAmount = amount % maxRow;
-          this._selectedIndex = reverse ? this._selectedIndex - realAmount: this._selectedIndex + realAmount;
-          return this._selectedIndex;
+          this.selectedIndex = reverse ? this.selectedIndex - realAmount : this.selectedIndex + realAmount;
+          return this.selectedIndex;
         ]]></body>
       </method>
     </implementation>
+    <handlers>
+      <handler event="mousemove" phase="capturing"><![CDATA[
+        // let's just see if we can steal the mousemove focus by overriding this
+        // one handler.
+        // TODO: I don't think we need this?
+        event.preventDefault();
+      ]]></handler>
+    </handlers>
   </binding>
 
   <![CDATA[
@@ -113,6 +97,23 @@
         // If our add-on handles the event, it returns true. Else, it returns
         // false, and the existing XBL key handlers handle the key event.
         return window.universalSearch.urlbar.onKeyPress(event) || this.handleKeyPress(event);
+      ]]></handler>
+    </handlers>
+  </binding>
+
+  <![CDATA[
+    /*
+    Listen for mouseenter events on the results list.
+    TODO: not sure this has to happen in XBL, maybe we can listen in JS?
+    */
+  ]]>
+  <binding id="autocomplete-richlistbox" extends="chrome://global/content/bindings/autocomplete.xml#autocomplete-richlistbox">
+    <handlers>
+      <handler event="mouseenter" phase="capturing"><![CDATA[
+        // if the mouse moves over the results list, the recommendation
+        // should lose its highlight
+        window.universalSearch.popup.onResultsMouseEnter(event);
+        return true;
       ]]></handler>
     </handlers>
   </binding>
