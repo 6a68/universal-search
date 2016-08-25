@@ -18,7 +18,6 @@
       <xul:hbox anonid="footer">
         <children/>
         <xul:vbox anonid="one-off-search-buttons"
-                  class="search-one-offs"
                   compact="true"
                   includecurrentengine="true"
                   disabletab="true"
