@@ -25,6 +25,14 @@
                   flex="1"/>
       </xul:hbox>
     </content>
+    <implementation>
+      <!-- overriding the autocomplete.xml impementaiton of maxRows
+           so that we can ensure it's never negative. Theory is that this
+           leads to #295 -->
+      <property name="maxRows"
+                onset="this.setAttribute('maxrows', Math.max(val, 0)); return Math.max(val, 0);"
+                onget="return parseInt(this.getAttribute('maxrows')) || 0;" />
+    </implementation>
   </binding>
 
   <![CDATA[
