@@ -38,7 +38,7 @@
       <handler event="keypress" phase="capturing"><![CDATA[
         // If our add-on handles the event, it returns true. Else, it returns
         // false, and the existing XBL key handlers handle the key event.
-        return window.universalSearch.urlbar.onKeyPress(event) || this.handleKeyPress(event);
+        return window.universalSearch.urlbar.onKeyPress(event) || this.onKeyPress(event);
       ]]></handler>
     </handlers>
   </binding>
