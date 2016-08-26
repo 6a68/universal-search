@@ -24,6 +24,11 @@
                   flex="1"/>
       </xul:hbox>
     </content>
+    <implementation>
+      <constructor>
+        this.mInput = window.gURLBar;
+      </constructor>
+    </implementation>
   </binding>
 
   <![CDATA[
